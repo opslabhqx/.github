@@ -1,87 +1,85 @@
 {
-    "$schema": "https://docs.renovatebot.com/renovate-schema.json",
-    "description": "Default preset for our opslabhq repositories.",
-    "extends": [
-      "config:recommended",
-      ":maintainLockFilesWeekly",
-      ":semanticCommits",
-      ":semanticCommitScope(deps)",
-      "docker:enableMajor",
-      "docker:pinDigests",
-      "helpers:pinGitHubActionDigests"
-    ],
-    "assignees": ["yhs88a"],
-    "dependencyDashboard": true,
-    "separateMajorMinor": true,
-    "packageRules": [
-      {
-        "description": "Require Dependency Dashboard approval for major updates, except Renovate.",
-        "excludePackagePatterns": [
-          "^renovate(bot)?($|/)",
-          "^@renovatebot/"
-        ],
-        "matchUpdateTypes": ["major"],
-        "dependencyDashboardApproval": true
-      },
-      {
-        "description": "Do not require Dependency Dashboard approval for major GitHub Action updates.",
-        "matchManagers": ["github-actions"],
-        "matchUpdateTypes": ["major"],
-        "dependencyDashboardApproval": false
-      },
-      {
-        "description": "Automerge non-major updates.",
-        "matchUpdateTypes": ["minor", "patch", "digest", "lockFileMaintenance"],
-        "automerge": true
-      },
-      {
-        "description": "Disable minor updates for Ubuntu.",
-        "matchDatasources": ["docker"],
-        "matchDepNames": [
-          "ubuntu"        ],
-        "matchUpdateTypes": ["minor"],
-        "enabled": false
-      },
-      {
-        "description": "Group Renovate Buildpack and Ubuntu digest updates.",
-        "matchDatasources": ["docker"],
-        "matchUpdateTypes": ["digest"],
-        "matchDepNames": [
-          "ubuntu"
-        ],
-        "branchTopic": "{{{depNameSanitized}}}-digests",
-        "commitMessageTopic": "{{{depName}}} Docker digests"
-      },
-      {
-        "description": "Use `ci` semanctic type for some deps.",
-        "matchPaths": [".github/workflows/**", ".github/actions/**"],
-        "semanticCommitType": "ci",
-        "additionalBranchPrefix": "ci-"
-      },
-      {
-        "description": "Do not pin digest for regex manager.",
-        "matchManagers": ["regex"],
-        "pinDigests": false
-      }
-    ],
-    "regexManagers": [
-        {
-          "description": "Update `_VERSION:` variables in Dockerfile.",
-            "fileMatch": [
-              "(^|/)Dockerfile$",
-              "(^|/)Dockerfile\\.[^/]*$"
-            ],
-            "matchStrings": [
-              "#\\srenovate:\\sdatasource=(?<datasource>.*?) depName=(?<depName>.*?)( versioning=(?<versioning>.*?))?( extractVersion=(?<extractVersion>.*?))?\\s(ENV|ARG) .*?_VERSION=(?<currentValue>.*)\\s"
-            ]
-          },
-          {
-            "description": "Update `version:` and `_VERSION:` variables in GitHub workflow files.",
-            "fileMatch": ["^\\.github/workflows/[^/]+\\.ya?ml$"],
-            "matchStrings": [
-              "\\s+version: (?<currentValue>.+?) # renovate: datasource=(?<datasource>.+?) depName=(?<depName>.+?)(?: (?:packageName|lookupName)=(?<packageName>.+?))?(?: versioning=(?<versioning>.+?))?\\s",
-              "\\s*[A-Z_]+?_VERSION: (?<currentValue>.+?) # renovate: datasource=(?<datasource>.+?) depName=(?<depName>.+?)(?: (?:packageName|lookupName)=(?<packageName>.+?))?(?: versioning=(?<versioning>.+?))?\\s"
-            ]
-          }
-    ]
+  "$schema": "https://docs.renovatebot.com/renovate-schema.json",
+  "description": "Default preset for our opslabhq repositories.",
+  "extends": [
+    "config:recommended",
+    ":maintainLockFilesWeekly",
+    ":semanticCommits",
+    ":semanticCommitScope(deps)",
+    "docker:enableMajor",
+    "docker:pinDigests",
+    "helpers:pinGitHubActionDigests"
+  ],
+  "assignees": ["yhs88a"],
+  "dependencyDashboard": true,
+  "separateMajorMinor": true,
+  "packageRules": [
+    {
+      "description": "Require Dependency Dashboard approval for major updates, except Renovate.",
+      "excludePackagePatterns": [
+        "^renovate(bot)?($|/)",
+        "^@renovatebot/"
+      ],
+      "matchUpdateTypes": ["major"],
+      "dependencyDashboardApproval": true
+    },
+    {
+      "description": "Do not require Dependency Dashboard approval for major GitHub Action updates.",
+      "matchManagers": ["github-actions"],
+      "matchUpdateTypes": ["major"],
+      "dependencyDashboardApproval": false
+    },
+    {
+      "description": "Automerge non-major updates.",
+      "matchUpdateTypes": ["minor", "patch", "digest", "lockFileMaintenance"],
+      "automerge": true
+    },
+    {
+      "description": "Disable minor updates for Ubuntu.",
+      "matchDatasources": ["docker"],
+      "matchDepNames": ["ubuntu"],
+      "matchUpdateTypes": ["minor"],
+      "enabled": false
+    },
+    {
+      "description": "Group Renovate Buildpack and Ubuntu digest updates.",
+      "matchDatasources": ["docker"],
+      "matchUpdateTypes": ["digest"],
+      "matchDepNames": ["ubuntu"],
+      "branchTopic": "{{{depNameSanitized}}}-digests",
+      "commitMessageTopic": "{{{depName}}} Docker digests"
+    },
+    {
+      "description": "Use `ci` semantic type for some deps.",
+      "matchPaths": [".github/workflows/**", ".github/actions/**"],
+      "semanticCommitType": "ci",
+      "additionalBranchPrefix": "ci-"
+    },
+    {
+      "description": "Do not pin digest for regex manager.",
+      "matchManagers": ["regex"],
+      "pinDigests": false
+    }
+  ],
+  "regexManagers": [
+    {
+      "description": "Update _VERSION variables in Dockerfiles.",
+      "fileMatch": [
+        "(^|/|\\.)Dockerfile$",
+        "(^|/)Dockerfile\\.[^/]*$"
+      ],
+      "matchStrings": [
+        "# renovate: datasource=(?<datasource>[a-z-]+?) depName=(?<depName>.+?)(?: (?:packageName|lookupName)=(?<packageName>.+?))?(?: versioning=(?<versioning>[a-z-]+?))?\\s(?:ENV|ARG) .+?_VERSION=(?<currentValue>.+?)\\s"
+      ],
+      "versioningTemplate": "{{#if versioning}}{{versioning}}{{else}}semver{{/if}}"
+    },
+    {
+      "description": "Update `version:` and `_VERSION:` variables in GitHub workflow files.",
+      "fileMatch": ["^\\.github/workflows/[^/]+\\.ya?ml$"],
+      "matchStrings": [
+        "\\s+version: (?<currentValue>.+?) # renovate: datasource=(?<datasource>.+?) depName=(?<depName>.+?)(?: (?:packageName|lookupName)=(?<packageName>.+?))?(?: versioning=(?<versioning>.+?))?\\s",
+        "\\s*[A-Z_]+?_VERSION: (?<currentValue>.+?) # renovate: datasource=(?<datasource>.+?) depName=(?<depName>.+?)(?: (?:packageName|lookupName)=(?<packageName>.+?))?(?: versioning=(?<versioning>.+?))?\\s"
+      ]
+    }
+  ]
 }
