@@ -14,7 +14,6 @@ concurrency:
 env:
   LOG_LEVEL: debug
   RENOVATE_VERSION: 38.100.0 # renovate: datasource=npm depName=renovate
-  HUSKY: 0
 
 permissions:
   contents: read
@@ -43,6 +42,8 @@ jobs:
 
     steps:
       - uses: actions/checkout@v4.2.0
+        with:
+          show-progress: false
 
       - name: testing ${{ matrix.file }}
         run: npx -p renovate@${{env.RENOVATE_VERSION}} renovate-config-validator
