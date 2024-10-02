@@ -35,10 +35,10 @@
       "automerge": true
     },
     {
-      "description": "Disable minor updates for Ubuntu.",
+      "description": "Disable minor and patch updates for Ubuntu.",
       "matchDatasources": ["docker"],
       "matchDepNames": ["ubuntu"],
-      "matchUpdateTypes": ["minor"],
+      "matchUpdateTypes": ["minor", "patch"],
       "enabled": false
     },
     {
