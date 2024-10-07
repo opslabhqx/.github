@@ -31,7 +31,7 @@
     },
     {
       "description": "Automerge non-major updates.",
-      "matchUpdateTypes": ["minor", "patch", "digest", "lockFileMaintenance"],
+      "matchUpdateTypes": ["minor", "patch", "digest", "lockFileMaintenance", "pinDigest"],
       "automerge": true
     },
     {
@@ -79,15 +79,6 @@
       "matchStrings": [
         "\\s+version: (?<currentValue>.+?) # renovate: datasource=(?<datasource>.+?) depName=(?<depName>.+?)(?: (?:packageName|lookupName)=(?<packageName>.+?))?(?: versioning=(?<versioning>.+?))?\\s",
         "\\s*[A-Z_]+?_VERSION: (?<currentValue>.+?) # renovate: datasource=(?<datasource>.+?) depName=(?<depName>.+?)(?: (?:packageName|lookupName)=(?<packageName>.+?))?(?: versioning=(?<versioning>.+?))?\\s"
-      ]
-    },
-    {
-      "description": "Update _VERSION variables in Bash Scripts.",
-      "fileMatch": [
-        "(^|/)\\S+\\.sh$"
-      ],
-      "matchStrings": [
-        "^\\s*(?<variable>[A-Z_]+?_VERSION)=\\s*(?<currentValue>.+?)\\s*#\\s*renovate: datasource=(?<datasource>[a-z-]+?) depName=(?<depName>.+?)(?: (?:packageName|lookupName)=(?<packageName>.+?))?(?: versioning=(?<versioning>[a-z-]+?))?\\s*$"
       ]
     }
   ]
